@@ -1,4 +1,4 @@
-import type { NivelRisco, TipoDependencia, TipoPonto } from '../tipos';
+import type { NivelRisco, SituacaoPonto, TipoDependencia, TipoPonto } from '../tipos';
 
 export const BAIRROS = [
   'Aclimação',
@@ -64,6 +64,13 @@ export const rotuloTipoPonto: Record<TipoPonto, string> = {
   Metro: 'Estação de metrô',
   Comercio: 'Comércio parceiro',
   Comunidade: 'Espaço comunitário',
+};
+
+export const rotuloSituacaoPonto: Record<SituacaoPonto, string> = {
+  Funcionando: 'Aberto e com energia',
+  Lotado: 'Lotado, sem tomada livre',
+  SemEnergia: 'Sem energia no momento',
+  Fechado: 'Fechado',
 };
 
 export type ItemPreparo = { id: string; texto: string; para?: TipoDependencia[] };

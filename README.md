@@ -13,7 +13,7 @@ App em Expo (React Native + TypeScript + Expo Router) para quem depende de energ
 | Cidadão beneficiado | Quem depende de energia em casa (oxigênio domiciliar, insulina na geladeira, cadeira motorizada, idoso acamado) e quem cuida dessas pessoas |
 | Problema, em uma frase | Quando um temporal derruba a energia, quem depende dela para viver não é avisado antes, não sabe quanto tempo vai ficar sem luz nem onde achar uma tomada, e ninguém vai checar se está bem |
 | Como funciona | Um modelo treinado com dados do INMET e da ANEEL prevê os dias de risco de apagão. O app avisa os cadastrados com antecedência, aciona vizinhos voluntários para checar essas pessoas e mostra pontos com energia por perto |
-| O que cada parte faz | `api-csharp/`: cidadãos, voluntários, alertas e check-ins; `soa-java/`: pontos com energia; `mobile/`: app do cidadão (este repositório); [luzvital-ml](https://github.com/Caiorasuckkk/luzvital-ml): previsão do dia de risco; `cyber/`: proteção dos dados de saúde; `docs/`: requisitos e testes |
+| O que cada parte faz | `api-csharp/`: cidadãos, voluntários, alertas e check-ins; serviço de pontos (C#, entrega de SOA): pontos com energia; `mobile/`: app do cidadão (este repositório); [luzvital-ml](https://github.com/Caiorasuckkk/luzvital-ml): previsão do dia de risco; `cyber/`: proteção dos dados de saúde; `docs/`: requisitos e testes |
 | Link do repositório | https://github.com/Caiorasuckkk/luzvital |
 | Indicador de impacto | % de cadastrados avisados pelo menos 12h antes de um dia de risco e tempo até o primeiro check-in depois que a luz cai |
 | ODS conectados | 3, 7, 10, 11 e 13 |
@@ -81,6 +81,20 @@ POST http://localhost:5131/api/previsoes
 { "data": "2026-11-20", "probabilidade": 0.82, "versaoModelo": "xgb-v1" }
 ```
 
+### Com o serviço de pontos (entrega de SOA)
+
+A aba "Lugares" lê `GET /api/pontos` do serviço de pontos com energia, que fica no repositório da entrega de SOA.
+
+```bash
+# terminal 1, na pasta do repositório de SOA
+dotnet run --project src/LuzVital.Pontos.Api
+
+# terminal 2, nesta pasta: no .env, defina EXPO_PUBLIC_PONTOS_URL=http://localhost:5132
+npx expo start --clear
+```
+
+Vale a mesma tabela de endereços acima, trocando a porta para `5132`. Com o serviço no ar, o detalhe do lugar mostra também como ele está agora (aberto, lotado, sem energia ou fechado) e as tomadas livres.
+
 Verificações:
 
 ```bash
@@ -93,7 +107,7 @@ npx expo-doctor
 | Dado | Origem | Onde no código |
 | --- | --- | --- |
 | Alertas de risco | API C# (`/api/alertas`) quando `EXPO_PUBLIC_API_URL` está definida; senão, mock no mesmo formato | `src/services/api.ts` |
-| Lugares com energia | Mock (`src/dados/pontos.mock.json`), porque o serviço `soa-java` ainda não está no ar | `src/services/api.ts` |
+| Lugares com energia | Serviço de pontos (`/api/pontos`) quando `EXPO_PUBLIC_PONTOS_URL` está definida; sem ela, ou se o serviço não responder, mock (`src/dados/pontos.mock.json`) com os mesmos lugares | `src/services/api.ts` |
 
 A tela sempre diz de onde o dado veio: "Dados de demonstração" para o mock e "Sem conexão. Mostrando os avisos guardados em..." quando a API não responde. Nesse caso o app mostra a última cópia gravada no banco.
 

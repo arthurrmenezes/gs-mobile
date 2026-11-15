@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Linking } from 'react-native';
 
 import { Aviso, Botao, Carregando, Cartao, Linha, Subtitulo, Tela, Texto, Titulo } from '../../components/ui';
-import { rotuloTipoPonto } from '../../dados/dominio';
+import { rotuloSituacaoPonto, rotuloTipoPonto } from '../../dados/dominio';
 import { alternarFavorito, lerFavoritos } from '../../db/banco';
 import { buscarPonto } from '../../services/api';
 import { cores } from '../../tema';
@@ -54,6 +54,15 @@ export default function DetalhePonto() {
           <Texto peso="forte">Horário</Texto>
           <Texto>{ponto.horario}</Texto>
         </Linha>
+        {ponto.situacao ? (
+          <Linha icone={ponto.situacao === 'Funcionando' ? 'checkmark-circle' : 'alert-circle'}>
+            <Texto peso="forte">Como está agora</Texto>
+            <Texto>
+              {rotuloSituacaoPonto[ponto.situacao]}
+              {ponto.situacao === 'Funcionando' && ponto.tomadasLivres !== undefined ? `. Tomadas livres: ${ponto.tomadasLivres}` : ''}
+            </Texto>
+          </Linha>
+        ) : null}
       </Cartao>
 
       <Cartao>

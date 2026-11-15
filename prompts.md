@@ -21,3 +21,8 @@ A GS permite IA como copiloto, desde que os prompts fiquem registrados e a gente
 
 - **Pedido:** com a API C# rodando, verificar se o app está buscando os dados dela
 - **Aproveitado:** a conferência (API respondendo, sem alertas ativos), o arquivo `.env` que faltava e a explicação da regra: sem endereço configurado usa o mock; com endereço usa a API e, se ela cair, a cópia guardada no SQLite.
+
+## 15/11/2026 · Arthur · Claude Code
+
+- **Pedido:** ligar a aba "Lugares" ao serviço de pontos com energia feito na entrega de SOA (C#), sem quebrar o que já funcionava com o mock.
+- **Aproveitado:** a busca em `GET /api/pontos` quando `EXPO_PUBLIC_PONTOS_URL` está definida (com o mock de reserva se o serviço não responder), a linha "Como está agora" no detalhe do lugar, a variável nova no `.env.example` e a atualização do README. Os ids continuam `p1`, `p2`..., então os lugares já salvos seguem valendo.

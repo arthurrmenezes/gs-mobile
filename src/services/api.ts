@@ -6,16 +6,17 @@ import type { Alerta, NivelRisco, PontoEnergia, ResultadoAlertas } from '../tipo
 import { dataISO } from '../utils/datas';
 
 const API_URL = (process.env.EXPO_PUBLIC_API_URL ?? '').replace(/\/+$/, '');
+const PONTOS_URL = (process.env.EXPO_PUBLIC_PONTOS_URL ?? '').replace(/\/+$/, '');
 
 export const usandoApi = API_URL.length > 0;
 
 const esperar = (ms: number) => new Promise((ok) => setTimeout(ok, ms));
 
-async function buscarJson<T>(caminho: string, tempoLimiteMs = 6000): Promise<T> {
+async function buscarJson<T>(endereco: string, tempoLimiteMs = 6000): Promise<T> {
   const controle = new AbortController();
   const relogio = setTimeout(() => controle.abort(), tempoLimiteMs);
   try {
-    const resposta = await fetch(`${API_URL}${caminho}`, { signal: controle.signal, headers: { Accept: 'application/json' } });
+    const resposta = await fetch(endereco, { signal: controle.signal, headers: { Accept: 'application/json' } });
     if (!resposta.ok) throw new Error(`A API respondeu ${resposta.status}`);
     return (await resposta.json()) as T;
   } finally {
@@ -62,7 +63,7 @@ export async function buscarAlertas(db: SQLiteDatabase, bairro: string): Promise
   }
 
   try {
-    const lista = await buscarJson<Alerta[]>(`/api/alertas?bairro=${encodeURIComponent(bairro)}`);
+    const lista = await buscarJson<Alerta[]>(`${API_URL}/api/alertas?bairro=${encodeURIComponent(bairro)}`);
     const alertas = ordenar(lista);
     await guardarAlertas(db, alertas, agora);
     return { alertas, origem: 'api', atualizadoEm: agora };
@@ -82,8 +83,19 @@ export async function buscarAlertaGuardado(db: SQLiteDatabase, id: number): Prom
   return alertas.find((a) => a.id === id) ?? null;
 }
 
-// Mock: o serviço de pontos (soa-java) ainda não está no ar.
+// O serviço de pontos devolve o id como número; o app usa "p1", "p2"... (o mesmo id do mock e dos lugares salvos).
+type PontoDoServico = Omit<PontoEnergia, 'id'> & { id: number };
+
+// Com o serviço de pontos configurado (EXPO_PUBLIC_PONTOS_URL), busca nele. Sem endereço, ou se ele não responder, usa o mock.
 export async function buscarPontos(): Promise<PontoEnergia[]> {
+  if (PONTOS_URL) {
+    try {
+      const lista = await buscarJson<PontoDoServico[]>(`${PONTOS_URL}/api/pontos`);
+      return lista.map((p) => ({ ...p, id: `p${p.id}` }));
+    } catch {
+      return pontosMock as PontoEnergia[];
+    }
+  }
   await esperar(400);
   return pontosMock as PontoEnergia[];
 }

@@ -29,6 +29,8 @@ export type ResultadoAlertas = {
 
 export type TipoPonto = 'Saude' | 'Biblioteca' | 'Metro' | 'Comercio' | 'Comunidade';
 
+export type SituacaoPonto = 'Funcionando' | 'Lotado' | 'SemEnergia' | 'Fechado';
+
 export type PontoEnergia = {
   id: string;
   nome: string;
@@ -41,6 +43,9 @@ export type PontoEnergia = {
   aceitaEquipamentoMedico: boolean;
   guardaMedicamento: boolean;
   acessivel: boolean;
+  /** Só vêm do serviço de pontos; no mock ficam vazios. */
+  situacao?: SituacaoPonto;
+  tomadasLivres?: number;
 };
 
 export type Perfil = {
