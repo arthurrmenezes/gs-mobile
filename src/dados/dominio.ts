@@ -41,6 +41,8 @@ export const BAIRROS = [
   'Vila Prudente',
 ];
 
+export const nomeBairro = (b: string) => BAIRROS.find((x) => x.toUpperCase() === b.toUpperCase()) ?? b;
+
 export const DEPENDENCIAS: { valor: TipoDependencia; rotulo: string; descricao: string }[] = [
   { valor: 'OxigenioDomiciliar', rotulo: 'Oxigênio em casa', descricao: 'Concentrador ou outro aparelho para respirar' },
   { valor: 'MedicamentoRefrigerado', rotulo: 'Remédio na geladeira', descricao: 'Insulina ou outro remédio que precisa ficar gelado' },

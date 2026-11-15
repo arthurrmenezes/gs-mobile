@@ -25,8 +25,7 @@ App em Expo (React Native + TypeScript + Expo Router) para quem depende de energ
 
 ## Vídeo
 
-<!-- TODO: colar aqui o link do vídeo de até 3 minutos -->
-(link do vídeo)
+https://youtu.be/3Zgiv1VxC4s
 
 ## Jornada do cidadão
 

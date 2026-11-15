@@ -5,7 +5,7 @@ import { View } from 'react-native';
 
 import { Botao, Carregando, Cartao, Linha, SeloNivel, Subtitulo, Tela, Texto, Titulo } from '../../components/ui';
 import { useApp } from '../../contexto/AppContexto';
-import { orientacoes, rotuloDependencia } from '../../dados/dominio';
+import { nomeBairro, orientacoes, rotuloDependencia } from '../../dados/dominio';
 import { buscarAlertaGuardado } from '../../services/api';
 import { cores } from '../../tema';
 import type { Alerta } from '../../tipos';
@@ -40,7 +40,7 @@ export default function DetalheAlerta() {
       <View style={{ gap: 8 }}>
         <SeloNivel nivel={alerta.nivel} />
         <Titulo>{diaPorExtenso(alerta.data)}</Titulo>
-        <Texto cor={cores.textoSuave}>{alerta.bairro ? `Vale para ${alerta.bairro}` : 'Vale para a cidade toda'}</Texto>
+        <Texto cor={cores.textoSuave}>{alerta.bairro ? `Vale para ${nomeBairro(alerta.bairro)}` : 'Vale para a cidade toda'}</Texto>
       </View>
 
       <Cartao>
