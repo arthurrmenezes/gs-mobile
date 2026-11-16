@@ -26,3 +26,8 @@ A GS permite IA como copiloto, desde que os prompts fiquem registrados e a gente
 
 - **Pedido:** ligar a aba "Lugares" ao serviço de pontos com energia feito na entrega de SOA (C#), sem quebrar o que já funcionava com o mock.
 - **Aproveitado:** a busca em `GET /api/pontos` quando `EXPO_PUBLIC_PONTOS_URL` está definida (com o mock de reserva se o serviço não responder), a linha "Como está agora" no detalhe do lugar, a variável nova no `.env.example` e a atualização do README. Os ids continuam `p1`, `p2`..., então os lugares já salvos seguem valendo.
+
+## 15/11/2026 · Arthur · Claude Code
+
+- **Pedido:** colocar no README o link do repositório do serviço de pontos e deixar o README mais curto.
+- **Aproveitado:** o link e o README mais enxuto: as instruções das duas APIs viraram uma tabela, e saíram a árvore de pastas e os comandos de verificação. A ficha, a jornada, o banco, a acessibilidade e os prints continuam.
